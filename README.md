@@ -1,0 +1,169 @@
+<div align="center">
+<img src="docs/img/banner.png" alt="Data Foundry: random practice datasets where the numbers actually make sense together. 24 business subjects, 8 families, 200 rows per table, seeded, CSV and Excel download" width="900">
+<br><br>
+<img src="docs/img/site-home.png" alt="The Data Foundry home page: a shelf of 24 subject cards" width="820">
+</div>
+
+---
+
+## ✨ What it is
+
+Pick a business, choose up to **200 rows** and the number of **columns**, then view the table, read
+the column guide, and download it as **CSV** or **Excel**.
+
+The values are random. The relationships between them are built in: bigger houses cost more,
+deeper discounts sell more units, longer routes deliver late. So there is something real to find
+with pandas and charts, and nothing here is real data.
+
+Every table has a **seed**. The same subject, settings, seed and date always give the same table.
+
+<div align="center">
+<img src="docs/img/site-table.png" alt="A Property Listings table open in the slide-out drawer, with controls, downloads and a column guide" width="820">
+</div>
+
+## 🗂️ 24 subjects, 8 families
+
+| Family | | | |
+|---|---|---|---|
+| 🚗 **Automotive** | Car Sales | Car Insurance Claims | Vehicle Maintenance Records |
+| 🏠 **Real Estate** | Property Listings | Rental Property Management | Property Maintenance Records |
+| 🛒 **Retail** | Retail Product Sales | Inventory Management | Customer Purchase Behaviour |
+| 🏭 **Manufacturing** | Manufacturing Production Output | Quality Control & Defects | Factory Energy Usage |
+| 💷 **Finance** | Company Financial Performance | Investment Portfolio Returns | Loan & Credit Risk |
+| 👥 **HR** | Payroll & Compensation | Employee Performance Reviews | Recruitment & Hiring |
+| ☁️ **SaaS** | Customer Churn & Subscriptions | Product Usage Analytics | Customer Support Tickets |
+| 🚚 **Logistics** | Shipping & Delivery | Warehouse Operations | Supplier & Vendor Performance |
+
+---
+
+## 🧭 How it got here
+
+<div align="center">
+<img src="docs/img/journey-map.png" alt="The journey in six steps: simple idea, random labels, themed words, simulate the business, validate, stateless website" width="900">
+</div>
+
+### 1. A simple idea
+
+A small web page and a pandas script that make a random table for practice: choose rows and columns,
+download CSV or Excel.
+
+### 2. Random labels were useless
+
+The first column names and values were random letters, then random modifier-and-noun pairs.
+Nothing meant anything. The fix was themed vocabularies, so a car sales table talked about cars and
+a payroll table about employees.
+
+<div align="center">
+<img src="docs/img/journey-1-labels.png" alt="Two tables: one with random letter column names, one with random word-pair column names" width="820">
+</div>
+
+### 3. Meaningful words, meaningless numbers
+
+Every cell was still drawn on its own, so the numbers had no connection to the words beside them.
+A three-bedroom house could cost more than a six-bedroom one. A three-cylinder city car could have
+V8 power. Here is the old generator's real output:
+
+<div align="center">
+<img src="docs/img/journey-2-before.png" alt="Old generator output for property listings: price per square foot does not match price divided by size" width="820">
+</div>
+
+Plotted, it is a cloud. Size tells you nothing about price (left). Sprinkling a "row quality score"
+over independent draws only patched the symptoms, so the whole approach had to change.
+
+<div align="center">
+<img src="docs/img/price-vs-size.png" alt="Scatter plots of price against size: before is random noise, after is a clear upward trend" width="820">
+</div>
+
+### 4. Simulate the business, then describe it
+
+The generator was rebuilt around **one recipe per subject**. Each recipe first builds a coherent
+situation, then writes it out as columns:
+
+<div align="center">
+<img src="docs/img/how-a-recipe-works.png" alt="How one recipe builds a table: seed, build the situation, exact rules and tendencies, describe as columns, table" width="900">
+</div>
+
+- **Exact where it is a definition.** Price per square foot is price divided by size, every time.
+- **Statistical where it is a tendency.** Bigger houses cost more on average, with noise on top.
+- **Entities persist.** A vehicle or customer that appears in many rows behaves consistently.
+
+The same property listings, from the new generator:
+
+<div align="center">
+<img src="docs/img/journey-3-after.png" alt="New generator output for property listings: price per square foot is exactly price divided by size" width="820">
+</div>
+
+### 5. Check it, don't trust it
+
+`foundry/validate.py` runs every recipe across many seeds and row counts. Exact rules must hold
+every time, tendencies must hold in nearly all runs, and the same seed must reproduce the same
+table. **All 24 subjects pass 40 seeds at 200 and 3,000 rows.**
+
+### 6. Built to be hosted
+
+The first web app kept the last table in a global variable, which breaks as soon as two people use
+it. Now every table is rebuilt from its web address: the site is **stateless**, downloads always
+match the screen, and there is no database.
+
+### 🚧 Not done yet
+
+- Every table is clean. A layer of deliberate faults (missing values, duplicates, typos) for
+  cleaning practice is planned.
+- Some tendencies are weaker at very small row counts.
+- A few time-based subjects cover only a short date span at small sizes.
+
+---
+
+## 🚀 Run it locally
+
+```bash
+python -m venv venv
+source venv/bin/activate          # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python tools/build_web.py         # builds the website into docs/
+python -m http.server -d docs     # then open http://localhost:8000
+```
+
+Opening `docs/index.html` straight from disk will not work: browsers block the Python engine from
+loading over `file://`.
+
+## 🌐 Live website (GitHub Pages)
+
+The website is fully static: the same Python generator runs **in the browser** through
+[Pyodide](https://pyodide.org), so no server is involved. The first visit downloads the Python
+engine (roughly 20-30 MB, then cached by the browser) and the page shows its status while it
+starts. Excel downloads load `openpyxl` on first use. Pyodide is loaded from the jsDelivr CDN
+(pinned to one version), so visitors' browsers contact that CDN.
+
+The finished site lives in `docs/`, and GitHub Pages serves it from the `main` branch
+(**Settings -> Pages -> Deploy from a branch -> main, /docs**). After changing anything in `site/`,
+`foundry/` or `static/`, run `python tools/build_web.py` and commit the updated `docs/`.
+
+## 🧱 Project layout
+
+```
+docs/                  the finished website, served by GitHub Pages (built, do not hand-edit)
+  img/                 pictures used in this README
+site/                  page template, browser script, Pyodide worker, Python bridge
+tools/build_web.py     builds site/ + foundry/ + static/ into docs/
+foundry/
+  core.py              seeds, column choice, shared helpers
+  display.py           names, colours and number formatting for the page
+  recipes/             one file per subject (24)
+  validate.py          validation harness
+static/                stylesheet and self-hosted fonts
+tests/smoke_test.py    checks every subject: shape, seeds, CSV and Excel
+```
+
+## 🛠️ Development
+
+```bash
+pip install -r requirements-dev.txt
+python tests/smoke_test.py             # every subject, seeds, CSV and Excel
+python -m foundry.validate --seeds 25  # relationship checks for every subject
+```
+
+## 📄 Licence
+
+MIT, see `LICENSE`. Fonts (Fraunces, DM Sans, DM Mono) are under the SIL Open Font Licence, see
+`static/fonts/LICENSES.txt`.

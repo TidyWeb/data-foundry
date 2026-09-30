@@ -1,0 +1,8 @@
+
+/* Web version only */
+.engine { display: inline-block; margin-left: 12px; padding: 4px 10px; border-radius: 999px; font-size: 13px;
+          background: #0001; vertical-align: middle; }
+.engine.ok { background: #1B9AAA22; }
+.engine.bad { background: #ef476f33; }
+.busy { opacity: .55; pointer-events: none; }
+.drawer .loading { padding: 32px; }

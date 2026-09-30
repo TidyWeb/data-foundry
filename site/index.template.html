@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Data Foundry</title>
+    <meta name="description" content="Random practice datasets for learning pandas and data visualisation, built from small simulated businesses so the numbers make sense together.">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <h1>Data <span>Foundry</span></h1>
+    <p class="lead">Random practice tables for pandas and data visualisation, built from small simulated businesses.</p>
+    <p>Each dataset is a tiny business: car sales, rentals, payroll, loans, shipments and so on. The values are random, but the relationships between them are built in &mdash; bigger houses cost more, deeper discounts sell more units, longer routes deliver late &mdash; so there is something real to find with pandas and charts, and nothing here is real data.</p>
+    <div class="how">
+        <div class="step"><div class="n">1</div><h3>Pick a business</h3><p>Choose one of the 24 below, or press Surprise me. Each card says what one row means and how many columns that business can supply.</p></div>
+        <div class="step"><div class="n">2</div><h3>Set the shape</h3><p>Choose 1&ndash;{{ max_rows }} rows and how many columns you want. Core columns always appear; extras are added as you ask for more. You get a note if the business has fewer.</p></div>
+        <div class="step"><div class="n">3</div><h3>Generate, explore, download</h3><p>You get the table and a guide to every column. Save it as CSV or Excel and load it with <code>pd.read_csv</code>. Each table has a seed: enter the same seed again to get the same table back.</p></div>
+    </div>
+    <a class="shuffle" href="#" id="surprise">Surprise me</a>
+    <span class="engine" id="engine" role="status">Starting the Python engine&hellip;</span>
+</header>
+
+<main>
+    {% for family in shelves %}
+    <section class="shelf">
+        <h2 style="color: {{ family.hue }}">{{ family.name }}</h2>
+        <div class="row">
+            {% for card in family.cards %}
+            <a class="card" href="?theme={{ card.key }}" data-theme="{{ card.key }}">
+                <div class="art" style="background: {{ family.hue }}"><i>{{ card.title[0] }}</i><b>{{ card.title }}</b></div>
+                <div class="body">
+                    <div class="rm">{{ card.row_meaning }}</div>
+                    <div class="mini">
+                        <div>{% for c in card.preview_cols %}<span>{{ c }}</span>{% endfor %}</div>
+                        {% for r in card.preview_rows %}<div>{% for v in r %}<span>{{ v }}</span>{% endfor %}</div>{% endfor %}
+                    </div>
+                    <div class="meta"><span>{{ card.min_cols }}&ndash;{{ card.max_cols }} columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+    {% endfor %}
+</main>
+
+<footer>
+    <p>Data Foundry generates fictional data for practice. Nothing here describes real people, companies or events.</p>
+</footer>
+
+<div id="drawer-root"></div>
+<script>window.FOUNDRY = { maxRows: {{ max_rows }}, maxCols: {{ max_cols }}, themes: {{ themes | tojson }} };</script>
+<script src="app.js"></script>
+</body>
+</html>

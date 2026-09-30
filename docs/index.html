@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Data Foundry</title>
+    <meta name="description" content="Random practice datasets for learning pandas and data visualisation, built from small simulated businesses so the numbers make sense together.">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <h1>Data <span>Foundry</span></h1>
+    <p class="lead">Random practice tables for pandas and data visualisation, built from small simulated businesses.</p>
+    <p>Each dataset is a tiny business: car sales, rentals, payroll, loans, shipments and so on. The values are random, but the relationships between them are built in &mdash; bigger houses cost more, deeper discounts sell more units, longer routes deliver late &mdash; so there is something real to find with pandas and charts, and nothing here is real data.</p>
+    <div class="how">
+        <div class="step"><div class="n">1</div><h3>Pick a business</h3><p>Choose one of the 24 below, or press Surprise me. Each card says what one row means and how many columns that business can supply.</p></div>
+        <div class="step"><div class="n">2</div><h3>Set the shape</h3><p>Choose 1&ndash;200 rows and how many columns you want. Core columns always appear; extras are added as you ask for more. You get a note if the business has fewer.</p></div>
+        <div class="step"><div class="n">3</div><h3>Generate, explore, download</h3><p>You get the table and a guide to every column. Save it as CSV or Excel and load it with <code>pd.read_csv</code>. Each table has a seed: enter the same seed again to get the same table back.</p></div>
+    </div>
+    <a class="shuffle" href="#" id="surprise">Surprise me</a>
+    <span class="engine" id="engine" role="status">Starting the Python engine&hellip;</span>
+</header>
+
+<main>
+    
+    <section class="shelf">
+        <h2 style="color: #e4572e">Automotive</h2>
+        <div class="row">
+            
+            <a class="card" href="?theme=automotive_insurance" data-theme="automotive_insurance">
+                <div class="art" style="background: #e4572e"><i>C</i><b>Car Insurance Claims</b></div>
+                <div class="body">
+                    <div class="rm">One row is one claim on a 12-month car insurance policy; a policy with several claims appears several times.</div>
+                    <div class="mini">
+                        <div><span>driver_age_band</span><span>vehicle_value</span><span>damage_type</span></div>
+                        <div><span>25-34</span><span>14,300</span><span>minor collision</span></div><div><span>25-34</span><span>13,700</span><span>minor collision</span></div><div><span>65+</span><span>11,400</span><span>vandalism</span></div>
+                    </div>
+                    <div class="meta"><span>5&ndash;15 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+            <a class="card" href="?theme=automotive_car_sales" data-theme="automotive_car_sales">
+                <div class="art" style="background: #e4572e"><i>C</i><b>Car Sales</b></div>
+                <div class="body">
+                    <div class="rm">One row is one completed used-car sale by a dealer (one vehicle per row) in the last 24 months.</div>
+                    <div class="mini">
+                        <div><span>segment</span><span>model_year</span><span>mileage</span></div>
+                        <div><span>family</span><span>2020</span><span>34,462</span></div><div><span>sports</span><span>2021</span><span>12,276</span></div><div><span>city</span><span>2019</span><span>35,228</span></div>
+                    </div>
+                    <div class="meta"><span>4&ndash;14 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+            <a class="card" href="?theme=automotive_maintenance" data-theme="automotive_maintenance">
+                <div class="art" style="background: #e4572e"><i>V</i><b>Vehicle Maintenance Records</b></div>
+                <div class="body">
+                    <div class="rm">One row is one completed workshop job (a service or a repair) on one vehicle; each vehicle appears many times.</div>
+                    <div class="mini">
+                        <div><span>work_done</span><span>mileage_at_service</span><span>labor_hours</span></div>
+                        <div><span>full service</span><span>59,990</span><span>2.5</span></div><div><span>interim service</span><span>70,695</span><span>1</span></div><div><span>full service</span><span>80,671</span><span>3.5</span></div>
+                    </div>
+                    <div class="meta"><span>4&ndash;15 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+        </div>
+    </section>
+    
+    <section class="shelf">
+        <h2 style="color: #1d6fa5">Finance</h2>
+        <div class="row">
+            
+            <a class="card" href="?theme=finance_company_performance" data-theme="finance_company_performance">
+                <div class="art" style="background: #1d6fa5"><i>C</i><b>Company Financial Performance</b></div>
+                <div class="body">
+                    <div class="rm">One row is one company in one calendar quarter; each company appears in 12 consecutive quarters.</div>
+                    <div class="mini">
+                        <div><span>sector</span><span>revenue</span><span>operating_income</span></div>
+                        <div><span>manufacturing</span><span>29,167,156</span><span>-526,053</span></div><div><span>manufacturing</span><span>29,997,409</span><span>594,280</span></div><div><span>manufacturing</span><span>31,891,767</span><span>226,353</span></div>
+                    </div>
+                    <div class="meta"><span>5&ndash;15 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+            <a class="card" href="?theme=finance_investment_portfolio" data-theme="finance_investment_portfolio">
+                <div class="art" style="background: #1d6fa5"><i>I</i><b>Investment Portfolio Returns</b></div>
+                <div class="body">
+                    <div class="rm">One row is one holding (an asset inside a portfolio) at the end of one month; each portfolio is followed for 9 months.</div>
+                    <div class="mini">
+                        <div><span>asset_class</span><span>allocation</span><span>valuation</span></div>
+                        <div><span>equity</span><span>7.89</span><span>6045</span></div><div><span>commodity</span><span>16.4</span><span>12,561</span></div><div><span>bond</span><span>10.81</span><span>8282</span></div>
+                    </div>
+                    <div class="meta"><span>4&ndash;14 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+            <a class="card" href="?theme=finance_lending" data-theme="finance_lending">
+                <div class="art" style="background: #1d6fa5"><i>L</i><b>Loan &amp; Credit Risk</b></div>
+                <div class="body">
+                    <div class="rm">One row is one approved loan, observed at the snapshot date; declined applications are not included.</div>
+                    <div class="mini">
+                        <div><span>credit_score</span><span>loan_amount</span><span>interest_rate</span></div>
+                        <div><span>647</span><span>16,200</span><span>8.64</span></div><div><span>700</span><span>14,100</span><span>6.16</span></div><div><span>690</span><span>4500</span><span>7</span></div>
+                    </div>
+                    <div class="meta"><span>4&ndash;14 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+        </div>
+    </section>
+    
+    <section class="shelf">
+        <h2 style="color: #e09f3e">HR</h2>
+        <div class="row">
+            
+            <a class="card" href="?theme=hr_performance" data-theme="hr_performance">
+                <div class="art" style="background: #e09f3e"><i>E</i><b>Employee Performance Reviews</b></div>
+                <div class="body">
+                    <div class="rm">One row is one employee in one annual review cycle (the three most recent yearly reviews).</div>
+                    <div class="mini">
+                        <div><span>tenure_months</span><span>training_hours</span><span>productivity</span></div>
+                        <div><span>16</span><span>13</span><span>99</span></div><div><span>28</span><span>29</span><span>110</span></div><div><span>40</span><span>65</span><span>128</span></div>
+                    </div>
+                    <div class="meta"><span>4&ndash;14 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+            <a class="card" href="?theme=hr_payroll" data-theme="hr_payroll">
+                <div class="art" style="background: #e09f3e"><i>P</i><b>Payroll &amp; Compensation</b></div>
+                <div class="body">
+                    <div class="rm">One row is one monthly payslip for one employee, for every pay date since the start of the current pay year (1 April).</div>
+                    <div class="mini">
+                        <div><span>role_family</span><span>salary</span><span>gross_pay</span></div>
+                        <div><span>technical</span><span>47,500</span><span>4101.08</span></div><div><span>technical</span><span>47,500</span><span>4072.53</span></div><div><span>technical</span><span>47,500</span><span>6978.28</span></div>
+                    </div>
+                    <div class="meta"><span>4&ndash;16 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+            <a class="card" href="?theme=hr_recruitment" data-theme="hr_recruitment">
+                <div class="art" style="background: #e09f3e"><i>R</i><b>Recruitment &amp; Hiring</b></div>
+                <div class="body">
+                    <div class="rm">One row is one job vacancy that has been filled, showing the hiring funnel behind it and the journey of the person hired.</div>
+                    <div class="mini">
+                        <div><span>seniority</span><span>salary_offered</span><span>applicants</span></div>
+                        <div><span>lead</span><span>89,000</span><span>18</span></div><div><span>mid</span><span>74,000</span><span>57</span></div><div><span>junior</span><span>30,000</span><span>39</span></div>
+                    </div>
+                    <div class="meta"><span>4&ndash;14 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+        </div>
+    </section>
+    
+    <section class="shelf">
+        <h2 style="color: #2d6a4f">Logistics</h2>
+        <div class="row">
+            
+            <a class="card" href="?theme=logistics_shipping" data-theme="logistics_shipping">
+                <div class="art" style="background: #2d6a4f"><i>S</i><b>Shipping &amp; Delivery</b></div>
+                <div class="body">
+                    <div class="rm">One row is one shipment that has been delivered to its destination (shipments still in transit are not included).</div>
+                    <div class="mini">
+                        <div><span>service_level</span><span>distance</span><span>weight</span></div>
+                        <div><span>standard</span><span>807</span><span>26.9</span></div><div><span>economy</span><span>384</span><span>18</span></div><div><span>economy</span><span>337</span><span>35.4</span></div>
+                    </div>
+                    <div class="meta"><span>5&ndash;14 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+            <a class="card" href="?theme=logistics_supplier" data-theme="logistics_supplier">
+                <div class="art" style="background: #2d6a4f"><i>S</i><b>Supplier &amp; Vendor Performance</b></div>
+                <div class="body">
+                    <div class="rm">One row is one purchase order placed with a supplier and already received (orders still on their way are not included).</div>
+                    <div class="mini">
+                        <div><span>supplier_id</span><span>lead_time</span><span>unit_price</span></div>
+                        <div><span>V04</span><span>22</span><span>7.18</span></div><div><span>V02</span><span>19</span><span>8.96</span></div><div><span>V01</span><span>24</span><span>8.84</span></div>
+                    </div>
+                    <div class="meta"><span>4&ndash;14 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+            <a class="card" href="?theme=logistics_warehouse" data-theme="logistics_warehouse">
+                <div class="art" style="background: #2d6a4f"><i>W</i><b>Warehouse Operations</b></div>
+                <div class="body">
+                    <div class="rm">One row is one warehouse-day: one distribution warehouse on one day, with its backlog and stock carried over from the day before.</div>
+                    <div class="mini">
+                        <div><span>daily_capacity</span><span>orders_received</span><span>orders_processed</span></div>
+                        <div><span>2006</span><span>1581</span><span>1739</span></div><div><span>1417</span><span>1521</span><span>1417</span></div><div><span>1823</span><span>1698</span><span>1802</span></div>
+                    </div>
+                    <div class="meta"><span>4&ndash;14 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+        </div>
+    </section>
+    
+    <section class="shelf">
+        <h2 style="color: #6d597a">Manufacturing</h2>
+        <div class="row">
+            
+            <a class="card" href="?theme=manufacturing_energy" data-theme="manufacturing_energy">
+                <div class="art" style="background: #6d597a"><i>F</i><b>Factory Energy Usage</b></div>
+                <div class="body">
+                    <div class="rm">One row is one factory site on one calendar day.</div>
+                    <div class="mini">
+                        <div><span>site_id</span><span>production_units</span><span>heating_degree_days</span></div>
+                        <div><span>S1</span><span>483</span><span>9.8</span></div><div><span>S2</span><span>1521</span><span>12.3</span></div><div><span>S3</span><span>734</span><span>11.8</span></div>
+                    </div>
+                    <div class="meta"><span>4&ndash;14 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+            <a class="card" href="?theme=manufacturing_production" data-theme="manufacturing_production">
+                <div class="art" style="background: #6d597a"><i>M</i><b>Manufacturing Production Output</b></div>
+                <div class="body">
+                    <div class="rm">One row is one production line-shift: what one line made during one shift on one day.</div>
+                    <div class="mini">
+                        <div><span>line_id</span><span>downtime</span><span>output</span></div>
+                        <div><span>L1</span><span>33</span><span>1877</span></div><div><span>L2</span><span>81</span><span>2323</span></div><div><span>L3</span><span>37</span><span>1588</span></div>
+                    </div>
+                    <div class="meta"><span>4&ndash;14 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+            <a class="card" href="?theme=manufacturing_quality" data-theme="manufacturing_quality">
+                <div class="art" style="background: #6d597a"><i>Q</i><b>Quality Control &amp; Defects</b></div>
+                <div class="body">
+                    <div class="rm">One row is one production batch that was inspected by sampling.</div>
+                    <div class="mini">
+                        <div><span>supplier_grade</span><span>machine_wear</span><span>inspected</span></div>
+                        <div><span>B</span><span>207</span><span>160</span></div><div><span>A</span><span>372</span><span>120</span></div><div><span>B</span><span>385</span><span>140</span></div>
+                    </div>
+                    <div class="meta"><span>4&ndash;14 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+        </div>
+    </section>
+    
+    <section class="shelf">
+        <h2 style="color: #2a9d8f">Real Estate</h2>
+        <div class="row">
+            
+            <a class="card" href="?theme=real_estate_listings" data-theme="real_estate_listings">
+                <div class="art" style="background: #2a9d8f"><i>P</i><b>Property Listings</b></div>
+                <div class="body">
+                    <div class="rm">One row is one property listing that went under contract (an offer was accepted) in the last 24 months.</div>
+                    <div class="mini">
+                        <div><span>location_area</span><span>bedrooms</span><span>square_footage</span></div>
+                        <div><span>Hillcrest</span><span>4</span><span>2060</span></div><div><span>Millbrook</span><span>4</span><span>1215</span></div><div><span>Brookvale</span><span>3</span><span>955</span></div>
+                    </div>
+                    <div class="meta"><span>4&ndash;13 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+            <a class="card" href="?theme=real_estate_maintenance" data-theme="real_estate_maintenance">
+                <div class="art" style="background: #2a9d8f"><i>P</i><b>Property Maintenance Records</b></div>
+                <div class="body">
+                    <div class="rm">One row is one completed repair job on one component of one property, found at a routine inspection; each property appears many times.</div>
+                    <div class="mini">
+                        <div><span>component</span><span>job_scope</span><span>contractor_hours</span></div>
+                        <div><span>roof</span><span>minor</span><span>2.5</span></div><div><span>boiler</span><span>moderate</span><span>5.5</span></div><div><span>roof</span><span>minor</span><span>3</span></div>
+                    </div>
+                    <div class="meta"><span>4&ndash;15 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+            <a class="card" href="?theme=real_estate_rentals" data-theme="real_estate_rentals">
+                <div class="art" style="background: #2a9d8f"><i>R</i><b>Rental Property Management</b></div>
+                <div class="body">
+                    <div class="rm">One row is one occupied rental unit in one calendar month (a rent ledger line); empty months have no row.</div>
+                    <div class="mini">
+                        <div><span>area</span><span>bedrooms</span><span>monthly_rent</span></div>
+                        <div><span>suburban</span><span>4</span><span>1640</span></div><div><span>suburban</span><span>4</span><span>1640</span></div><div><span>suburban</span><span>4</span><span>1640</span></div>
+                    </div>
+                    <div class="meta"><span>4&ndash;15 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+        </div>
+    </section>
+    
+    <section class="shelf">
+        <h2 style="color: #ef476f">Retail</h2>
+        <div class="row">
+            
+            <a class="card" href="?theme=retail_customer" data-theme="retail_customer">
+                <div class="art" style="background: #ef476f"><i>C</i><b>Customer Purchase Behaviour</b></div>
+                <div class="body">
+                    <div class="rm">One row is one customer-month in which the customer visited the website at least once.</div>
+                    <div class="mini">
+                        <div><span>customer_id</span><span>orders</span><span>spend</span></div>
+                        <div><span>C0001</span><span>0</span><span>0</span></div><div><span>C0001</span><span>0</span><span>0</span></div><div><span>C0001</span><span>0</span><span>0</span></div>
+                    </div>
+                    <div class="meta"><span>4&ndash;14 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+            <a class="card" href="?theme=retail_inventory" data-theme="retail_inventory">
+                <div class="art" style="background: #ef476f"><i>I</i><b>Inventory Management</b></div>
+                <div class="body">
+                    <div class="rm">One row is one SKU-week: what one product did in the warehouse during one Monday-to-Sunday week.</div>
+                    <div class="mini">
+                        <div><span>sku_id</span><span>units_sold</span><span>stock_level</span></div>
+                        <div><span>SKU0001</span><span>48</span><span>278</span></div><div><span>SKU0001</span><span>32</span><span>246</span></div><div><span>SKU0001</span><span>27</span><span>218</span></div>
+                    </div>
+                    <div class="meta"><span>4&ndash;14 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+            <a class="card" href="?theme=retail_sales" data-theme="retail_sales">
+                <div class="art" style="background: #ef476f"><i>R</i><b>Retail Product Sales</b></div>
+                <div class="body">
+                    <div class="rm">One row is one order line: one product bought on one order (an order can have several lines).</div>
+                    <div class="mini">
+                        <div><span>product_category</span><span>price</span><span>discount</span></div>
+                        <div><span>books</span><span>18.99</span><span>0</span></div><div><span>home</span><span>45.99</span><span>0</span></div><div><span>home</span><span>129.99</span><span>0</span></div>
+                    </div>
+                    <div class="meta"><span>4&ndash;14 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+        </div>
+    </section>
+    
+    <section class="shelf">
+        <h2 style="color: #5f4bb6">SaaS</h2>
+        <div class="row">
+            
+            <a class="card" href="?theme=saas_subscriptions" data-theme="saas_subscriptions">
+                <div class="art" style="background: #5f4bb6"><i>C</i><b>Customer Churn &amp; Subscriptions</b></div>
+                <div class="body">
+                    <div class="rm">One row is one customer-month: one billing month of one software subscription, from signup until the customer cancels or today.</div>
+                    <div class="mini">
+                        <div><span>plan</span><span>seats</span><span>monthly_recurring_revenue</span></div>
+                        <div><span>growth</span><span>12</span><span>0</span></div><div><span>growth</span><span>12</span><span>300</span></div><div><span>business</span><span>46</span><span>1748</span></div>
+                    </div>
+                    <div class="meta"><span>5&ndash;14 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+            <a class="card" href="?theme=saas_support" data-theme="saas_support">
+                <div class="art" style="background: #5f4bb6"><i>C</i><b>Customer Support Tickets</b></div>
+                <div class="body">
+                    <div class="rm">One row is one customer support ticket that has already been resolved (tickets still open today are not included).</div>
+                    <div class="mini">
+                        <div><span>category</span><span>priority</span><span>resolution_time</span></div>
+                        <div><span>billing</span><span>low</span><span>1198</span></div><div><span>integration</span><span>low</span><span>5911</span></div><div><span>feature-request</span><span>urgent</span><span>72</span></div>
+                    </div>
+                    <div class="meta"><span>4&ndash;14 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+            <a class="card" href="?theme=saas_usage" data-theme="saas_usage">
+                <div class="art" style="background: #5f4bb6"><i>P</i><b>Product Usage Analytics</b></div>
+                <div class="body">
+                    <div class="rm">One row is one user-day: a day on which one user opened the product at least once, summarised from that day&#39;s sessions.</div>
+                    <div class="mini">
+                        <div><span>seat_count</span><span>sessions</span><span>session_length</span></div>
+                        <div><span>16</span><span>1</span><span>412</span></div><div><span>16</span><span>3</span><span>8176</span></div><div><span>16</span><span>2</span><span>2104</span></div>
+                    </div>
+                    <div class="meta"><span>5&ndash;14 columns</span><span>Open &rarr;</span></div>
+                </div>
+            </a>
+            
+        </div>
+    </section>
+    
+</main>
+
+<footer>
+    <p>Data Foundry generates fictional data for practice. Nothing here describes real people, companies or events.</p>
+</footer>
+
+<div id="drawer-root"></div>
+<script>window.FOUNDRY = { maxRows: 200, maxCols: 16, themes: ["automotive_car_sales", "automotive_insurance", "automotive_maintenance", "finance_company_performance", "finance_investment_portfolio", "finance_lending", "hr_payroll", "hr_performance", "hr_recruitment", "logistics_shipping", "logistics_supplier", "logistics_warehouse", "manufacturing_energy", "manufacturing_production", "manufacturing_quality", "real_estate_listings", "real_estate_maintenance", "real_estate_rentals", "retail_customer", "retail_inventory", "retail_sales", "saas_subscriptions", "saas_support", "saas_usage"] };</script>
+<script src="app.js"></script>
+</body>
+</html>
