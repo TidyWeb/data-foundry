@@ -90,6 +90,13 @@ dd { margin: 0; color: var(--dim); }
     dl { grid-template-columns: 1fr; }
 }
 
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.seg a, .seg button { padding: 9px 14px; border: 0; background: var(--card); color: var(--ink); font: inherit; cursor: pointer; text-decoration: none; }
+.seg a + a, .seg button + button { border-left: 1px solid var(--line); }
+.seg .on { background: var(--accent); color: #fff; }
+.messy-note { background: #ef476f33; }
+td { white-space: pre; }
+
 /* Web version only */
 .engine { display: inline-block; margin-left: 12px; padding: 4px 10px; border-radius: 999px; font-size: 13px;
           background: #0001; vertical-align: middle; }

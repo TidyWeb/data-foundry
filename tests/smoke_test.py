@@ -41,5 +41,11 @@ for key in sorted(RECIPES):
     df.to_excel(buffer, index=False, engine="openpyxl")
     expect(buffer.getvalue()[:2] == b"PK", f"{key}: Excel file is not a valid xlsx")
 
+# Keep the messy-data checks in the repository's standard test run.
+import subprocess
+faults = subprocess.run([sys.executable, str(Path(__file__).with_name("faults_test.py"))], check=False)
+if faults.returncode:
+    problems.append(f"faults_test.py exited with status {faults.returncode}")
+
 print(f"subjects: {len(RECIPES)} | problems: {len(problems)}")
 sys.exit(1 if problems else 0)

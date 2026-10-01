@@ -65,7 +65,8 @@
       rows: clampInt(q.get("rows"), DEFAULT_ROWS, 1, CFG.maxRows),
       cols: clampInt(q.get("cols"), DEFAULT_COLS, 1, CFG.maxCols),
       seed: clampInt(q.get("seed"), null, 0, MAX_SEED),
-      d: validDate(q.get("d"))
+      d: validDate(q.get("d")),
+      messy: q.get("messy") === "1" ? 1 : 0
     };
   }
   function toQuery(p) {
@@ -73,6 +74,7 @@
     q.set("theme", p.theme); q.set("rows", p.rows); q.set("cols", p.cols);
     if (p.seed !== null && p.seed !== undefined) { q.set("seed", p.seed); }
     if (p.d) { q.set("d", p.d); }
+    if (p.messy) { q.set("messy", "1"); }
     return "?" + q.toString();
   }
   function go(query, replace) {
@@ -114,12 +116,18 @@
       '<div><label for="cols">Columns</label><input id="cols" name="cols" type="number" min="1" max="' + CFG.maxCols + '" value="' + t.n_cols + '"></div>' +
       '<div><label for="seed">Seed</label><input id="seed" name="seed" type="number" min="0" max="' + MAX_SEED + '" value="' + t.seed + '" class="wide"></div>' +
       '<button class="go" type="submit" style="background:' + esc(t.hue) + '">Update</button>' +
+      '<div><label>Data</label><div class="seg" role="group" aria-label="Data quality">' +
+      '<button type="button" data-messy="0" class="' + (t.messy ? "" : "on") + '">Clean</button>' +
+      '<button type="button" data-messy="1" class="' + (t.messy ? "on" : "") + '">Messy</button></div></div>' +
       '<a class="b2" href="#" id="fresh">New random table</a></form>' +
       '<p class="hint">' + esc(t.title) + " supplies " + t.min_cols + "&ndash;" + t.max_cols + " columns. Same seed and settings give the same table.</p>" +
       (t.note ? '<div class="note">' + esc(t.note) + "</div>" : "") +
+      (t.messy ? '<div class="note messy-note">Messy: ' + t.problems + " problems planted (" + t.n_rows + " rows asked for, " +
+        t.n_shown + " shown, because duplicates and stray rows are added). Find and fix them, then check against the answer key.</div>" : "") +
       '<div class="tw"><table><thead><tr>' + head + "</tr></thead><tbody>" + body + "</tbody></table></div>" +
       '<div class="bar"><button class="b2" type="button" id="dl-csv">Download CSV</button>' +
       '<button class="b2" type="button" id="dl-xlsx">Download Excel</button>' +
+      (t.messy ? '<button class="b2" type="button" id="dl-key">Download answer key</button>' : "") +
       '<button class="b2" type="button" id="copy">Copy pandas line</button></div>' +
       "<details open><summary>What the columns mean</summary><dl>" + docs + "</dl></details></div>";
     document.body.classList.add("has-drawer");
@@ -134,14 +142,23 @@
         rows: clampInt(f.rows.value, DEFAULT_ROWS, 1, CFG.maxRows),
         cols: clampInt(f.cols.value, DEFAULT_COLS, 1, CFG.maxCols),
         seed: clampInt(f.seed.value, newSeed(), 0, MAX_SEED),
-        d: p.d
+        d: p.d,
+        messy: p.messy
       }));
+    });
+    Array.prototype.forEach.call(document.querySelectorAll(".seg button"), function (b) {
+      b.addEventListener("click", function () {
+        var want = parseInt(b.dataset.messy, 10);
+        if (want !== p.messy) { go(toQuery({ theme: p.theme, rows: p.rows, cols: p.cols, seed: p.seed, d: p.d, messy: want })); }
+      });
     });
     document.getElementById("fresh").addEventListener("click", function (e) {
       e.preventDefault();
-      go(toQuery({ theme: p.theme, rows: p.rows, cols: p.cols, seed: newSeed(), d: today() }));
+      go(toQuery({ theme: p.theme, rows: p.rows, cols: p.cols, seed: newSeed(), d: today(), messy: p.messy }));
     });
     document.getElementById("dl-csv").addEventListener("click", function () { download(p, "make_csv", t.csv_name, "text/csv", this); });
+    var keyButton = document.getElementById("dl-key");
+    if (keyButton) { keyButton.addEventListener("click", function () { download(p, "make_key", t.key_name, "text/csv", this); }); }
     document.getElementById("dl-xlsx").addEventListener("click", function () {
       download(p, "make_xlsx", t.xlsx_name, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", this);
     });
@@ -156,7 +173,7 @@
     var label = button.textContent;
     button.textContent = fn === "make_xlsx" ? "Preparing Excel..." : "Preparing...";
     button.disabled = true;
-    py(fn, [p.theme, p.rows, p.cols, p.seed, p.d]).then(function (data) {
+    py(fn, [p.theme, p.rows, p.cols, p.seed, p.d, p.messy]).then(function (data) {
       var url = URL.createObjectURL(new Blob([data], { type: type }));
       var a = document.createElement("a");
       a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
@@ -178,7 +195,7 @@
     }
     if (!engineReady) { showDrawerMessage("Starting the Python engine - the first visit takes a few seconds."); return; }
     var token = ++renderToken;
-    py("make_table", [p.theme, p.rows, p.cols, p.seed, p.d]).then(function (json) {
+    py("make_table", [p.theme, p.rows, p.cols, p.seed, p.d, p.messy]).then(function (json) {
       if (token === renderToken) { drawTable(JSON.parse(json), p); }
     }).catch(function (err) {
       if (token === renderToken) { showDrawerMessage("Could not build that table: " + err.message); }

@@ -105,10 +105,33 @@ The first web app kept the last table in a global variable, which breaks as soon
 it. Now every table is rebuilt from its web address: the site is **stateless**, downloads always
 match the screen, and there is no database.
 
+### 7. Messy data on demand
+
+Real data is never this tidy, so every table can be switched from **Clean** to **Messy**. The clean
+table is built first and never changed; a separate step (`foundry/faults.py`) then damages a copy,
+and the same seed always gives the same mess. Every change is written to a downloadable **answer key**
+(row, column, problem, original value, messy value), and undoing the key gives back the clean table
+exactly. Nothing on screen highlights the damage.
+
+| Problem | How | Rate |
+|---|---|---|
+| Missing values | blank, N/A, null, -, ? | 3-8% of cells in 2-4 columns |
+| Numbers stored as text | "1,250", "£40.99", "40,99", trailing space | 4-8% in 1-2 numeric columns |
+| Dates in other formats | 15/06/2025, 06-15-2025, 15 Jun 2025, 20250615 | 20-40% in 1-2 date columns |
+| Invalid dates | 31/02/2025, TBC | 1-2% |
+| Casing, stray spaces, typos | UPPER / Title, padded text, swapped or dropped letters | 5-10%, 3-6%, 1-3% |
+| Mixed True/False | Yes/No, Y/N, 1/0, true/FALSE | 15-30% of one Boolean column |
+| Outliers and impossible values | x10, x100, negatives, 999999 or -1 | 0.5-1.5% |
+| Duplicate rows | exact copies | 1-3% of rows |
+| Conflicting duplicate IDs | same ID, different value | 0.5-1% |
+| Messy headers | Title Case, UPPER, camelCase, trailing space | about half of the headers |
+| Stray rows | a repeated header row and a blank row | once each |
+
+Overall about 5-12% of cells are damaged, so the table stays workable. A messy table has a few more
+rows than requested (duplicates and stray rows), and the page says so.
+
 ### 🚧 Not done yet
 
-- Every table is clean. A layer of deliberate faults (missing values, duplicates, typos) for
-  cleaning practice is planned.
 - Some tendencies are weaker at very small row counts.
 - A few time-based subjects cover only a short date span at small sizes.
 
@@ -159,7 +182,7 @@ tests/smoke_test.py    checks every subject: shape, seeds, CSV and Excel
 
 ```bash
 pip install -r requirements-dev.txt
-python tests/smoke_test.py             # every subject, seeds, CSV and Excel
+python tests/smoke_test.py             # engine and messy-data checks for every subject
 python -m foundry.validate --seeds 25  # relationship checks for every subject
 ```
 
