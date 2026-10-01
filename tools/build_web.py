@@ -35,7 +35,7 @@ def main():
 
     css = (ROOT / "static" / "style.css").read_text(encoding="utf-8")
     (OUT / "style.css").write_text(css + (SITE / "extra.css").read_text(encoding="utf-8"), encoding="utf-8")
-    for name in ("app.js", "worker.js", "web_api.py"):
+    for name in ("app.js", "worker.js", "web_api.py", "tidyweb-logo.png"):
         shutil.copy(SITE / name, OUT / name)
     shutil.copytree(ROOT / "static" / "fonts", OUT / "fonts", dirs_exist_ok=True)
     (OUT / ".nojekyll").write_text("")
