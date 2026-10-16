@@ -1,3 +1,5 @@
+## [🌐 Open the live site: https://tidyweb.github.io/data-foundry/ ↗](https://tidyweb.github.io/data-foundry/)
+
 <div align="center">
 <img src="docs/img/banner.png" alt="Data Foundry: random practice datasets where the numbers actually make sense together. 24 business subjects, 8 families, 200 rows per table, seeded, CSV and Excel download" width="900">
 <br><br>
